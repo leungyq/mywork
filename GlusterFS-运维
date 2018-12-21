@@ -56,9 +56,28 @@ gluster volume set arch-img cluster.heal-timeout 300  //自动愈合检查间隔
 gluster volume set arch-img performance.write-behind-window-size 256M       
     //能提高写性能单个文件后写缓冲区的大小默认 1M   
        
-       
-       
-       
+#################################################################################################
+
+glusterfs 分布式+复制卷
+
+  分布式复制模式（组合型）, 最少需要 4 台服务器或者 2 台服务器 4 块磁盘才能创建。
+  创建 volume 时 replica 2 server = 4 个节点：是 DHT 与 AFR 的组合型。
+  
+  gluster volume create test-volume replica 2 transport tcp server1:/exp1 server2:/exp2 server3:/exp3 server4:/exp4
+
+##################################################################################################
+
+巡检脚本：/apps/sh/daily_check/check_nfs.sh  /apps/sh/daily_check/check.sh
+磁盘检测脚本：/apps/sh/Megacli.py
+获取空间使用量脚本：/apps/sh/get_diskspace.py
+网络读写带宽脚本：/apps/sh/get_mbps/get_mbpsdata.py
+zabbix监控脚本：/root/get_Storage_monitor.py
+性能采集脚本：/root/gluster.py
+时延脚本：/root/check_nfs_profile_v2.sh
+业务流量脚本iftop：/root/pgf/iftop.sh
+测试挂载读写脚本：/root/pgf/sh/testmount.sh /root/pgf/sh/clmount.sh
+
+
        
        
        
