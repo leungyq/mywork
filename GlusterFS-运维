@@ -1,0 +1,64 @@
+--系统配额
+
+gluster volume quota VOLNAME enable/disable  //开启、关闭系统配额
+
+gluster volume quota VOLNAME limit-usage /img limit-value  //设置目录配额
+  --gluster volume quota cl01vol01 limit-usage /hcy_data01 10GB  
+      //设置 cl01vol01 卷下的/hcy_data01 子目录的限额为 10GB，这个/hcy_data01 目录是客户端挂载的目录。 
+      
+ gluster volume quota VOLNAME list
+    //查看目的卷的所有配额设置，可以显示配额大小及当前使用容量，若无使用容量(最小 0KB)则说明设置的目录可能
+      是错误的(不存在)
+      
+ ---------------------------------------------------------------------------------------
+      
+--地域复制
+
+gluster volume geo-replication MASTER SLAVE start/stop/status
+    //地域复制是系统提供的灾备功能，能够将系统的全部数据进行异步的增量备份到另外的磁盘中。
+    
+gluster volume gro-replication img 192.168.10.8:/data/brick1 start
+    //如上，开始执行将 img 卷的所有内容备份到 192.168.10.8 下的/data1/brick1 中的 task，需要注意的是，
+       这个备份目标不能是系统中的 Brick。 
+       
+ ---------------------------------------------------------------------------------------
+       
+--平衡卷
+
+gluster volume rebalance VOLNAME fix-layout start  
+gluster volume rebalance VOLNAME migrate-data start  //先重新修改布局然后移动现有的数据（重新平衡） 
+
+gluster volume rebalance VOLNAME start  //以上两步二合一
+
+gluster volume rebalance VOLNAME status   //可在平衡过程中查看平衡信息
+gluster volume rebalance VOLNAME stop   //可暂停平衡，再次启动会从上次暂停位置继续平衡      
+
+----------------------------------------------------------------------------------------
+       
+--I/O 信息查看       
+    #Profile Command 提供接口查看一个卷中的每一个 brick 的 IO 信息
+    
+gluster volume profile VOLNAME start  //启动profiling
+gluster volume profile VOLUME info  //查看 IO 信息，详细至brick
+gluster volume profile VLONAME stop //查看结束后关闭profiling功能
+
+----------------------------------------------------------------------------------------       
+       
+--性能优化配置选项
+gluster volume set arch-img cluster.min-free-disk 默认是10%  //磁盘剩余警告
+gluster volume set arch-img cluster.min-free-inodes 默认是5%  //inodes剩余警告       
+gluster volume set img performance.read-ahead-page-count 8  //默认是4，预读取数量      
+gluster volume set img performance.io-thread-count 16  //默认是16，IO操作的最大线程   
+gluster volume set arch-img network.ping-timeout 10 //响应超时，默认42s
+gluster volume set arch-img performance.cache-size 2GB //默认为128M 或 32M
+gluster volume set arch-img cluster.self-heal-daemon on  //开启目录索引自动愈合进程
+gluster volume set arch-img cluster.heal-timeout 300  //自动愈合检查间隔，默认为600s （3.4.2版本才有）      
+gluster volume set arch-img performance.write-behind-window-size 256M       
+    //能提高写性能单个文件后写缓冲区的大小默认 1M   
+       
+       
+       
+       
+       
+       
+       
