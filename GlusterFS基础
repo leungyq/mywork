@@ -1,0 +1,30 @@
+gluster peer status   //集群状态
+
+gluster volume info   //查看卷状态
+gluster volume info volname   //查看卷信息
+gluster volume start volname    //启动卷
+
+gluster peer probe IP/主机名   //增加节点
+gluster peer detach IP/主机名    //删除节点
+gluster peer status   //节点状态
+
+gluster volume add-brick volname server:/brick1   //增加brick
+
+gluster remove-brick volname server:/brick1 start   //开始删除
+gluster remove-brick volname server:/brick1 status    //删除状态（重新平衡数据）
+gluster remove-brick volname server:/brick1 commit    //删除brick
+
+gluster volume rebalance volname fix-layout start   //增删brick后对卷执行负载均衡
+gluster volume rebalance volname start    //开启平衡
+gluster volume rebalance volname status   //进行状态
+
+gluster volume stop volname   //停止卷
+gluster volume delete volname   //删除卷
+
+基本性能测试
+dd if=/dev/zero of=dd.dat bs=1M count=1k
+dd if=dd.dat of=/dev/null bs=1M count=1k
+
+带宽测试
+iozone -r 1m -s 128m -t 4 -i 0 -i 1
+
